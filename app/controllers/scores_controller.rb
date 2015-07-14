@@ -8,10 +8,10 @@ class ScoresController < ApplicationController
 	def show
 		score_num = Score.maximum('score')
 		if score_num.nil?
-			score_num = 0
+			score_num = '%04d' % 0
 		end
 		score = {
-				'score' => score_num,
+				'score' => '%04d' % score_num,
 		}
 		render json: score
   end
