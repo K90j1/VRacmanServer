@@ -6,29 +6,31 @@ class ScoresController < ApplicationController
 	end
 
 	def show
-		@score = Score.maximum('score')
-		if @score == 0
-			@score = 0
+		score_num = Score.maximum('score')
+		if score_num.nil?
+			score_num = 0
 		end
 		score = {
-				'score' => @score,
+				'score' => score_num,
 		}
 		render json: score
   end
 
   def create
     @score = Score.new(score_params)
+		if @score.save
+			client = Twitter::REST::Client.new do |config|
+				config.consumer_key        = "YOUR_CONSUMER_KEY"
+				config.consumer_secret     = "YOUR_CONSUMER_SECRET"
+				config.access_token        = "YOUR_ACCESS_TOKEN"
+				config.access_token_secret = "YOUR_ACCESS_SECRET"
+			end
+			client.update("I'm tweeting with @gem!")
+		else
+			score_params = false
+		end
 		render json: score_params
-
-    # respond_to do |format|
-      if @score.save
-        # format.html { redirect_to @score, notice: 'Score was successfully created.' }
-        # format.json { render action: 'show', status: :created, location: @score }
-      # else
-        # format.html { render action: 'new' }
-        # format.json { render json: @score.errors, status: :unprocessable_entity }
-      end
-  end
+	end
 
   private
     # Never trust parameters from the scary internet, only allow the white list through.
