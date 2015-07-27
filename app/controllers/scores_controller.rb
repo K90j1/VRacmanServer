@@ -14,12 +14,16 @@ class ScoresController < ApplicationController
   end
 
   def create
-    @score = Score.new(score_params)
+		_score_params = {
+				:name => score_params['score'][0]['name'],
+				:score => score_params['score'][0]['score']
+		}
+    @score = Score.new(_score_params)
 		if @score.save
-			_score_num = '%05d' % score_params[:score]
-			_status = "#{score_params[:name]} のスコア #{_score_num} #{TAG}"
-			if Score.maximum('score') < score_params[:score].to_i
-				_status = " ☆最高得点☆ #{score_params[:name]} のスコア #{_score_num}！！ #{TAG}"
+			_score_num = '%05d' % _score_params[:score]
+			_status = "#{_score_params[:name]} のスコア #{_score_num} #{TAG}"
+			if Score.maximum('score') < _score_params[:score].to_i
+				_status = " ☆最高得点☆ #{_score_params[:name]} のスコア #{_score_num}！！ #{TAG}"
 			end
 			client = Twitter::REST::Client.new do |config|
 				config.consumer_key        = 'nC9zyaLl0ofz3a3gPLSvRlvgT'
@@ -35,9 +39,9 @@ class ScoresController < ApplicationController
 		render json: _result
 	end
 
-  private
+	private
     # Never trust parameters from the scary internet, only allow the white list through.
     def score_params
-      params.require(:score).permit(:name, :score)
+      params.permit(:score => [:name, :score])
     end
 end
