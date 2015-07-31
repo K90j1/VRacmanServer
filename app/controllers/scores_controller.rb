@@ -1,5 +1,5 @@
 class ScoresController < ApplicationController
-	TAG = '-- VRゲーム VRacMan メイカーフェアトーキョー2015で展示中！！'
+	TAG = 'VRゲーム RacMan メイカーフェアトーキョー2015で展示してます'
 	protect_from_forgery :except => :create
 
 	def show
@@ -21,9 +21,9 @@ class ScoresController < ApplicationController
     @score = Score.new(_score_params)
 		if @score.save
 			_score_num = '%05d' % _score_params[:score]
-			_status = "#{_score_params[:name]} のスコア #{_score_num} #{TAG}"
+			_status = "#{_score_params[:name]} さんのスコア 『#{_score_num}』 #{TAG}"
 			if Score.maximum('score') < _score_params[:score].to_i
-				_status = " ☆最高得点☆ #{_score_params[:name]} のスコア #{_score_num}！！ #{TAG}"
+				_status = " ☆最高得点☆ #{_score_params[:name]} さんのスコア 『#{_score_num}』！！ #{TAG}"
 			end
 			client = Twitter::REST::Client.new do |config|
 				config.consumer_key        = 'nC9zyaLl0ofz3a3gPLSvRlvgT'
