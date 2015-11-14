@@ -1,5 +1,5 @@
 class ScoresController < ApplicationController
-	TAG = 'VRゲーム RacMan メイカーフェアトーキョー2015で展示してます'
+	TAG = 'It’s being held at Leap Motion 3D Jam 2015. http://goo.gl/RL6wKG'
 	protect_from_forgery :except => :create
 
 	def show
